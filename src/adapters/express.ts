@@ -21,10 +21,12 @@ const defaultErrorResponseBuilder = (payload: RequestLimiterRequest) => {
 }
 
 export const rateLimitExpress = (options: ExpressRateLimitOptions = {}) => {
+  const errorResponseBuilder = options.errorResponseBuilder || defaultErrorResponseBuilder;
   const hasImportantQueue = !!options.isImportantRequest;;
 
   const rateLimit = new RateLimit<RequestLimiterRequest>({
     ...options,
+    hasImportantQueue,
     handleNextRequest: (payload) => {
       onFinished(payload.res, () => {
         rateLimit.finish()
@@ -33,7 +35,7 @@ export const rateLimitExpress = (options: ExpressRateLimitOptions = {}) => {
       payload.next();
     },
     handleDiscardedRequest: (payload) => {
-      defaultErrorResponseBuilder(payload)
+      errorResponseBuilder(payload)
     },
     isRequestExpired: (payload) => {
       return payload.req.socket.destroyed;
