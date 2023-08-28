@@ -20,8 +20,18 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "exports": {
-    "require": "./dist/index.js",
-    "import": "./dist/index.mjs"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./adapters/fastify": {
+      "require": "./dist/adapters/fastify.js",
+      "import": "./dist/adapters/fastify.mjs"
+    },
+    "./adapters/express": {
+      "require": "./dist/adapters/express.js",
+      "import": "./dist/adapters/express.mjs"
+    }
   },
   "types": "./dist/index.d.ts",
   "tsup": {

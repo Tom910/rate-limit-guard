@@ -23,12 +23,6 @@ npm install --save rate-limit-guard
 
 ### Express
 
-You need to install additional packages to use the Express adapter:
-
-```bash
-npm install --save express on-finished
-```
-
 Add middleware `rateLimitExpress` to your Express app:
 ```js
 const express = require('express');
@@ -49,12 +43,6 @@ app.listen(3000, () => {
 ```
 
 ### Fastify
-
-You need to install additional packages to use the Express adapter:
-
-```bash
-npm install --save fastify fastify-plugin on-finished
-```
 
 Add plugin `rateLimitFastify` to your Fastify app:
 ```js
