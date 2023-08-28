@@ -1,0 +1,2 @@
+## Set up
+- `pnpm i`
