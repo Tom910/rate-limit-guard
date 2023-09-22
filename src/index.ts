@@ -1,6 +1,6 @@
 import type { IntervalHistogram } from 'perf_hooks';
 import { monitorEventLoopDelay } from 'perf_hooks';
-import { DoubleLinkedList } from './doubleLinkedList';
+import { Queue } from './queue';
 
 export const DEFAULT_OPTIONS = {
   activeLimit: 10,
@@ -26,8 +26,8 @@ type PartialExcept<T, K extends keyof T> = Partial<T> & { [P in K]: T[P] }
 
 export class RateLimit<Payload = any> {
   private currentActive = 0;
-  private queue = new DoubleLinkedList<Payload>();
-  private queueImportant = new DoubleLinkedList<Payload>();
+  private queue = new Queue<Payload>();
+  private queueImportant = new Queue<Payload>();
   private minimalActiveRequestLimit: number;
   private eventLoopHistogram: IntervalHistogram;
 
@@ -77,8 +77,8 @@ export class RateLimit<Payload = any> {
     return this.addRun(this.queue, data);
   }
 
-  private addRun(queue: DoubleLinkedList<Payload>, data: Payload) {
-    if (queue.length >= this.queueLimit) {
+  private addRun(queue: Queue<Payload>, data: Payload) {
+    if (queue.size() >= this.queueLimit) {
       const lastNode = queue.shift();
 
       this.handleDiscardedRequest(lastNode)
@@ -111,8 +111,8 @@ export class RateLimit<Payload = any> {
     }
   }
 
-  private loopQueue(queue: DoubleLinkedList<Payload>) {
-    while (queue.length > 0 && this.currentActive < this.activeLimit) {
+  private loopQueue(queue: Queue<Payload>) {
+    while (queue.size() > 0 && this.currentActive < this.activeLimit) {
       // better if we start with new requests. Because more opportunity to answer before client cancel request
       const nextRequest = queue.pop()!;
 

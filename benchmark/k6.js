@@ -4,7 +4,7 @@ export const options = {
   stages: [
     { duration: '5s', target: 10 },
     { duration: '10s', target: 100 },
-    { duration: '1m', target: 300 }
+    { duration: '20s', target: 300 }
   ],
   noConnectionReuse: true,
   userAgent: 'MyK6UserAgentString/1.0',
