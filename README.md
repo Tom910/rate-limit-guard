@@ -30,6 +30,10 @@ const { RateLimitExpress } = require('rate-limit-guard/adapters/express');
 
 const app = express();
 
+app.get('/healthz', (req, res) => { // Health check need to register before rateLimitExpress plugin. If you use K8S
+  res.json{ status: 'ok' }
+});
+
 app.use(rateLimitExpress());  // Very important to register plugin before any other middleware
 // app.use(bodyParser.json());
 
@@ -50,6 +54,11 @@ const fastify = require('fastify');
 const { rateLimitFastify } = require('rate-limit-guard/adapters/fastify');
 
 const app = fastify();
+
+fastify.get('/healthz', (request, reply) => { // Health check need to register before rateLimitFastify plugin. If you use K8S
+  return { status: 'ok' }
+});
+
 fastify.register(rateLimitFastify); // Very important to register plugin before any other plugins
 // fastify.register(require('fastify-cors'));
 
