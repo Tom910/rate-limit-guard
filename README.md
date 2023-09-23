@@ -2,6 +2,7 @@
 
 Rate limit guard is a library that helps to prevent overload of the Node.js server. This plugin can help to reduce the timing of the execution of requests. Usually, if you have more requests than your applications can handle it creates a big queue of requests, that consumes more memory and more CPU, a lot of requests will be executed in parallel. As a result, your server will be paralyzed. This library can help to prevent this problem by limiting the amount of executed requests and controlling the health of your server based on the event loop delay.
 
+You can also find more information in [the article on rate limiting](https://amarchenko.dev/blog/2023-09-23-rate-limiting/)
 
 ## Key Benefits:
 
