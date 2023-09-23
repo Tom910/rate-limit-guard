@@ -1,6 +1,6 @@
 import type { IntervalHistogram } from 'perf_hooks';
 import { monitorEventLoopDelay } from 'perf_hooks';
-import { Queue } from './queue';
+import { Deque } from './deque';
 
 export const DEFAULT_OPTIONS = {
   activeLimit: 10,
@@ -26,8 +26,8 @@ type PartialExcept<T, K extends keyof T> = Partial<T> & { [P in K]: T[P] }
 
 export class RateLimit<Payload = any> {
   private currentActive = 0;
-  private queue = new Queue<Payload>();
-  private queueImportant = new Queue<Payload>();
+  private queue = new Deque<Payload>();
+  private queueImportant = new Deque<Payload>();
   private minimalActiveRequestLimit: number;
   private eventLoopHistogram: IntervalHistogram;
 
@@ -77,7 +77,7 @@ export class RateLimit<Payload = any> {
     return this.addRun(this.queue, data);
   }
 
-  private addRun(queue: Queue<Payload>, data: Payload) {
+  private addRun(queue: Deque<Payload>, data: Payload) {
     if (queue.size() >= this.queueLimit) {
       const lastNode = queue.shift();
 
@@ -111,7 +111,7 @@ export class RateLimit<Payload = any> {
     }
   }
 
-  private loopQueue(queue: Queue<Payload>) {
+  private loopQueue(queue: Deque<Payload>) {
     while (queue.size() > 0 && this.currentActive < this.activeLimit) {
       // better if we start with new requests. Because more opportunity to answer before client cancel request
       const nextRequest = queue.pop()!;
