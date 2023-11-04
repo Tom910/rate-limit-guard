@@ -38,6 +38,7 @@ export class Deque<Value> {
     }
 
     const value = this.oldStack[this.oldStackFirstIndex];
+    this.oldStack[this.oldStackFirstIndex] = this.oldStack[0]; // remove element
 
     this.oldStackFirstIndex++;
 
